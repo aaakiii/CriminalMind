@@ -22,12 +22,11 @@ import java.util.List;
 public class CrimeListFragment extends Fragment {
 
     private RecyclerView mCrimeRecyclerView;
-    private CrimeAdapter mAdater;
+    private CrimeAdapter mAdapter;
 
     private static final String EXTRA_ID = "com.example.aki.climinal.extra_id";
     private static final String EXTRA_TITLE = "com.example.aki.climinal.extra_title";
-
-
+    private int mLastAdapterClickedPosition = -1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,14 +37,23 @@ public class CrimeListFragment extends Fragment {
         updateUI();
         return view;
     }
-
     private void updateUI() {
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
-        mAdater = new CrimeAdapter(crimes);
-        mCrimeRecyclerView.setAdapter(mAdater);
+        if(mAdapter == null){
+            mAdapter = new CrimeAdapter(crimes);
+            mCrimeRecyclerView.setAdapter(mAdapter);
+        }
+        else{
+            if(mLastAdapterClickedPosition < 0){
+                mAdapter.notifyDataSetChanged();
+            }
+            else{
+                mAdapter.notifyItemChanged(mLastAdapterClickedPosition);
+                mLastAdapterClickedPosition = -1;
+            }
+        }
     }
-
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTitleTextView;
         private TextView mDateTextView;
@@ -63,12 +71,14 @@ public class CrimeListFragment extends Fragment {
         }
                 @Override
                 public void onClick(View v) {
+                    mLastAdapterClickedPosition = getAdapterPosition();
                     Context context = v.getContext();
-                    Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getId());
+                    Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
                     startActivity(intent);
                 }
 
         public void bind(Crime crime) {
+
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
             mDateTextView.setText(DateFormat.getDateInstance().format(mCrime.getDate()));
@@ -112,5 +122,10 @@ public class CrimeListFragment extends Fragment {
         public int getItemCount() {
             return mCrimes.size();
         }
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateUI();
     }
 }
