@@ -23,10 +23,12 @@ public class CrimeListFragment extends Fragment {
 
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
-
-    private static final String EXTRA_ID = "com.example.aki.climinal.extra_id";
-    private static final String EXTRA_TITLE = "com.example.aki.climinal.extra_title";
     private int mLastAdapterClickedPosition = -1;
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateUI();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,7 +36,7 @@ public class CrimeListFragment extends Fragment {
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        updateUI();
+//        updateUI();
         return view;
     }
     private void updateUI() {
@@ -72,7 +74,6 @@ public class CrimeListFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     mLastAdapterClickedPosition = getAdapterPosition();
-                    Context context = v.getContext();
                     Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
                     startActivity(intent);
                 }
@@ -123,9 +124,5 @@ public class CrimeListFragment extends Fragment {
             return mCrimes.size();
         }
     }
-    @Override
-    public void onResume(){
-        super.onResume();
-        updateUI();
-    }
+
 }

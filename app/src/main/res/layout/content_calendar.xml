@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<DatePicker xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_date_picker"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.aki.climinal.CalendarActivity"
-    tools:showIn="@layout/activity_calendar">
+    android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
+</DatePicker>
